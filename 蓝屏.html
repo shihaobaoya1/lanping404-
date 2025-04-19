@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Windows 蓝屏</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #0078D7;
+            color: white;
+            font-family: 'Lucida Console', 'Courier New', monospace;
+            overflow: hidden;
+            cursor: none;
+        }
+        .bsod {
+            padding: 20px;
+            margin: 50px;
+        }
+        .emoji {
+            font-size: 24px;
+            margin-right: 10px;
+        }
+        .face {
+            font-size: 28px;
+        }
+        .progress {
+            width: 100%;
+            height: 5px;
+            background-color: rgba(255, 255, 255, 0.3);
+            margin: 20px 0;
+        }
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background-color: white;
+            animation: progress 5s linear forwards;
+        }
+        @keyframes progress {
+            from { width: 0%; }
+            to { width: 100%; }
+        }
+        .hidden {
+            display: none;
+        }
+        .restart-btn {
+            background-color: white;
+            color: #0078D7;
+            border: none;
+            padding: 10px 20px;
+            font-family: 'Lucida Console', 'Courier New', monospace;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="bsod">
+        <div>
+            <span class="emoji">:）</span>
+            <span>你的电脑与游览器没有遇到问题，但需要重新启动。</span>
+        </div>
+        <br>
+        <div>我们只收集某些错误信息，然后为你重新启动。</div>
+        <div id="complete-text" class="hidden">已完成 <span id="percent">0</span>%</div>
+        <br>
+        <div class="progress">
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
+        <br>
+        <div>
+            如需了解更多信息，则可以稍后向up主（站长）询问此错误: <span style="font-weight: bold;">今天你给我三连了吗：）</span>
+        </div>
+        <br><br>
+        <div id="qr-code" class="hidden">
+            <div style="background-color: white; width: 120px; height: 120px; margin-bottom: 10px;"></div>
+            <div>无视此空白二维码以不能获取有关此问题和可能的修补程序的信息</div>
+        </div>
+        <button class="restart-btn hidden" id="restart-btn">重新启动</button>
+    </div>
+
+    <script>
+        // 显示完成百分比
+        const percentElement = document.getElementById('percent');
+        const progressBar = document.getElementById('progress-bar');
+        const completeText = document.getElementById('complete-text');
+        const qrCode = document.getElementById('qr-code');
+        const restartBtn = document.getElementById('restart-btn');
+
+        let percent = 0;
+        const interval = setInterval(() => {
+            percent += Math.floor(Math.random() * 5) + 1;
+            if (percent > 100) percent = 100;
+            percentElement.textContent = percent;
+            
+            if (percent >= 10) completeText.classList.remove('hidden');
+            if (percent >= 30) qrCode.classList.remove('hidden');
+            if (percent >= 100) {
+                clearInterval(interval);
+                restartBtn.classList.remove('hidden');
+            }
+        }, 300);
+
+        // 重启
+        restartBtn.addEventListener('click', function() {
+            document.body.innerHTML = '<div class="bsod"><div>正在重新启动...</div><div style="margin-top: 20px;">请不要关闭你的计算机</div></div>';
+            setTimeout(() => {
+                alert('重启完成！关闭此弹窗返回蓝屏页面。');
+                location.reload();
+            }, 2000);
+        });
+    </script>
+</body>
+</html>
